@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <!-- 三个交叠的环 —— 与应用图标、语料原版的标记一致 -->
+  <rect width="200" height="120" fill="#232229"/>
+  <g fill="none" stroke="#d6cebe" stroke-width="5" vector-effect="non-scaling-stroke">
+    <circle cx="100" cy="44" r="34"/>
+    <circle cx="80" cy="72" r="34"/>
+    <circle cx="120" cy="72" r="34"/>
+  </g>
+</svg>

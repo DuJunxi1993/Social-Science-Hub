@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "社科研读",
+  "version": "0.1.0",
+  "identifier": "org.socialsciencehub.reader",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "社科研读 · 黑格尔",
+        "width": 1280,
+        "height": 860,
+        "minWidth": 900,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: asset: http://asset.localhost; font-src 'self' data:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg"],
+    "icon": ["icons/icon.png"],
+    "resources": {
+      "../../data/corpus.db": "corpus.db"
+    },
+    "copyright": "语料：Digital Hegel Edition（Giuliano Infantino），CC BY 4.0；黑格尔原文属公有领域",
+    "shortDescription": "离线中文学术研读平台",
+    "longDescription": "以黑格尔《Gesammelte Werke》数字版为底本的离线阅读与检索工具。"
+  }
+}

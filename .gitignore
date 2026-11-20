@@ -1,0 +1,30 @@
+# 依赖
+node_modules/
+.venv/
+.cargo-home/
+.npm-cache/
+
+# 构建产物
+app/dist/
+app/src-tauri/target/
+app/src-tauri/gen/
+etl/*.egg-info/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 语料产物（可由 ETL 重新生成，11 MB 起）
+data/
+
+# 生成的测试夹具（由 tools/make-mock.py 从语料库重新生成）
+tools/mock-data.json
+
+# 散落的数据库文件
+*.db
+*.db-wal
+*.db-shm
+
+# 编辑器与系统
+.DS_Store
+.idea/
+.vscode/
