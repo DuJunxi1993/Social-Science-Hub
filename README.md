@@ -134,6 +134,41 @@ unit_fts  FTS5 全文索引（存归一后的词）
 引用格式是 `GW 12, 241.36`（页.行），所以每个单元都存了行区间表，
 任意一个命中位置都能反查它落在第几行。
 
+## 语料快照
+
+语料是这个项目的核心资产，却有 226 MB —— 进不了 git，放进仓库也不合适。
+于是它以**快照**的形式单独发布：一旦某一版发出去，那个时间点的语料就固化了，
+不再依赖原站是否还在、是否还改版。
+
+最新一版：[语料快照 1.0](https://github.com/DuJunxi1993/Social-Science-Hub/releases/tag/corpus-1.0)
+
+| 文件 | 体积 | 说明 |
+|---|---|---|
+| `tei-1.0.tar.gz` | 17 MB | **41 个源 TEI** —— 事实来源 |
+| `corpus-1.0.db.gz` | 63 MB | 建好的语料库，解压即用 |
+| `manifest-1.0.json` | 14 KB | 校验和、逐卷来源、内容指纹 |
+
+```bash
+# 不想跑 ETL：直接用建好的库
+gunzip corpus-1.0.db.gz && mkdir -p data && mv corpus.db data/
+
+# 要改解析逻辑：从源 TEI 重建
+tar xzf tei-1.0.tar.gz
+cd etl && ./.venv/bin/python -m sshex build --work all \
+    --db ../data/corpus.db --cache ../data/tei
+```
+
+`manifest` 里有两个东西：**文件校验和**（确认下载没损坏）与**内容指纹**
+（确认重建出的库内容等价）。指纹覆盖每个内容单元与每条脚注，按固定顺序
+哈希，**只管内容不管 SQLite 的物理布局** —— 重建出的库字节可能不同，
+指纹一样即证明内容一致。
+
+自己打快照：
+
+```bash
+etl/.venv/bin/python tools/make-snapshot.py --version 1.1
+```
+
 ## 与原站的关系
 
 原站的 `assets/en/tei-leser.js` 是一份 13.7 KB 的 JavaScript，把源 TEI 派生成

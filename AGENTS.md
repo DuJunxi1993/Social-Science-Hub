@@ -24,6 +24,41 @@
 
 语料库**不入版本库**（226 MB），由 ETL 生成。
 
+## 语料快照
+
+语料是核心资产，但 226 MB 进不了 git —— 它以**快照**的形式单独发布。
+最新一版：[语料快照 1.0](https://github.com/DuJunxi1993/Social-Science-Hub/releases/tag/corpus-1.0)。
+
+| 文件 | 体积 | 说明 |
+|---|---|---|
+| `tei-1.0.tar.gz` | 17 MB | 41 个源 TEI —— 事实来源 |
+| `corpus-1.0.db.gz` | 63 MB | 建好的语料库，解压即用 |
+| `manifest-1.0.json` | 14 KB | 校验和、逐卷来源、内容指纹 |
+
+打包新快照：
+
+```bash
+etl/.venv/bin/python tools/make-snapshot.py --version 1.1
+etl/.venv/bin/python tools/make-snapshot.py --version 1.1 --verify   # 只验
+```
+
+产物落在 `dist/`（不入库）。发布时：
+
+```bash
+git tag -a corpus-1.1 -m "…"
+git push origin corpus-1.1
+gh release create corpus-1.1 --repo DuJunxi1993/Social-Science-Hub \
+    --title "语料快照 1.1" --notes-file dist/RELEASE-1.1.md \
+    dist/tei-1.1.tar.gz dist/corpus-1.1.db.gz dist/manifest-1.1.json
+```
+
+注意 `gh` 要显式带 `--repo` —— 本机 git 全局把 GitHub 的地址改写到了
+`gh-proxy.com`，`gh` 认不出那是个 GitHub 主机。
+
+**内容指纹只覆盖内容、不覆盖 SQLite 的物理布局** —— 重建出的库字节可能
+不同，指纹相同即证明内容等价。改了解析逻辑后，重建一遍、比对指纹，
+指纹变了就是内容真的变了。
+
 ## 测试
 
 | 范围 | 命令 | 数量 |
