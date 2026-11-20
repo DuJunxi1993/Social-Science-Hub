@@ -258,7 +258,15 @@ ETL 的正确性用原站当尺子量过 —— 原站自己的检索索引里�
 
 ## 许可与出处
 
-- 黑格尔原文：公有领域（卒于 1831）
-- 数字版数据与改编：Digital Hegel Edition，CC BY 4.0
-  （Giuliano Infantino，https://hegel.idealismedition.com）
-- 本项目的代码：见仓库
+**代码**（本仓库）：[MIT](LICENSE)。
+
+**语料**（另作授权）：
+
+- 黑格尔（卒于 1831）、费希特（卒于 1814）、谢林（卒于 1854）的原文均属**公有领域**
+- 三套数字版的数据与改编归 Giuliano Infantino 所有，以 **CC BY 4.0** 授权：
+  - [Digital Hegel Edition](https://hegel.idealismedition.com)
+  - [Digitale Fichte-Edition](https://fichte.idealismedition.com)
+  - [Digitale Schelling-Edition](https://schelling.idealismedition.com)
+- 本项目按 CC BY 4.0 的要求署名 —— 语料库每条卷记录里都有
+  `license_attribution` 与 `license_url`
+

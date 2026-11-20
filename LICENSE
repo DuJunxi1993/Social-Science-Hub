@@ -1,0 +1,32 @@
+MIT License
+
+Copyright (c) 2026 Social Science Hub Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+本许可适用于**本仓库的源代码**。
+
+**语料本身不适用本许可**，另见 README「许可与出处」：
+
+- 黑格尔、费希特、谢林的原文均属公有领域
+- 三套数字版的数据与改编归 Giuliano Infantino 所有，以 **CC BY 4.0** 授权
+  （hegel / fichte / schelling.idealismedition.com）
+- 本项目按 CC BY 4.0 的要求署名，见语料库中每条记录的 `license_attribution`
