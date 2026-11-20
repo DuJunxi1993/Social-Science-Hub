@@ -53,7 +53,7 @@ npm run app:build    # 打包 .app / .dmg
 
 ```bash
 cd etl && ./.venv/bin/python -m pytest tests/ -q          # 43 个
-cd app/src-tauri && cargo test --release                    # 24 个（含集成测试）
+cd app/src-tauri && cargo test --release                    # 33 个（含集成测试）
 ```
 
 Rust 侧的集成测试直接打开 `data/corpus.db` 跑完整链路：旧拼写能否查到、
@@ -69,6 +69,13 @@ Rust 侧的集成测试直接打开 `data/corpus.db` 跑完整链路：旧拼写
 
 ```bash
 cd tools && npm install --cache ./.npm-cache && node shoot.js /tmp/shots
+```
+
+夹具 `tools/mock-data.json` 是**生成物**，不入版本库 —— 从真语料库里切一片
+出来。重建了语料库就重新生成：
+
+```bash
+etl/.venv/bin/python tools/make-mock.py
 ```
 
 ## 语料库里有什么
