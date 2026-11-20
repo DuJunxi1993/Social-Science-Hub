@@ -28,3 +28,4 @@ tools/mock-data.json
 .DS_Store
 .idea/
 .vscode/
+dist/
