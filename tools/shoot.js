@@ -15,9 +15,6 @@ const path = require("path");
 const OUT = process.argv[2] || "/tmp/shots";
 const DATA = JSON.parse(fs.readFileSync(path.join(__dirname, "mock-data.json"), "utf8"));
 
-const EXEC =
-  "/Users/djx/Library/Caches/ms-playwright/chromium-1217/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing";
-
 // 把 Tauri IPC 换成假实现
 const MOCK = `
 window.__TAURI_INTERNALS__ = {
@@ -58,11 +55,39 @@ window.__TAURI_INTERNALS__ = {
 };
 `;
 
+/**
+ * 起一个浏览器。
+ *
+ * 按顺序试，谁能用就用谁：
+ *   1. Playwright 自带的 Chromium —— `npx playwright install chromium` 之后的标准路径
+ *   2. 系统装的 Edge
+ *   3. 系统装的 Chrome
+ *
+ * 后两条是给不想下 150 MB 浏览器的人留的：装了 Edge/Chrome 就能直接跑。
+ */
+async function launchBrowser() {
+  const attempts = [
+    { label: "Playwright 自带的 Chromium", options: {} },
+    { label: "系统 Edge", options: { channel: "msedge" } },
+    { label: "系统 Chrome", options: { channel: "chrome" } },
+  ];
+  const failures = [];
+  for (const attempt of attempts) {
+    try {
+      return await chromium.launch(attempt.options);
+    } catch (error) {
+      failures.push(`${attempt.label}：${String(error.message).split("\n")[0]}`);
+    }
+  }
+  throw new Error(
+    "起不来浏览器。依次试过：\n  " + failures.join("\n  ") +
+      "\n装一个就行：npx playwright install chromium",
+  );
+}
+
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch({
-    executablePath: fs.existsSync(EXEC) ? EXEC : undefined,
-  });
+  const browser = await launchBrowser();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
   const errors = [];

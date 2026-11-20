@@ -1,16 +1,17 @@
 {
   "name": "tools",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "前端验证工具（Playwright）",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node shoot.js /tmp/shots",
+    "mock": "../etl/.venv/bin/python make-mock.py"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "dependencies": {
+  "devDependencies": {
     "playwright": "^1.65.1"
   }
 }

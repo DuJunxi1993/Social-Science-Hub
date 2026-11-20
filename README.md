@@ -1,10 +1,16 @@
 # 社科研读 · Social Science Hub
 
-以黑格尔《Gesammelte Werke》数字版为底本的**离线**中文研读工具。
+以德国理想主义三家的数字版为底本的**离线**中文研读工具。
 
-底本来自 [Digital Hegel Edition](https://hegel.idealismedition.com)
-（Giuliano Infantino 编纂，**CC BY 4.0**；黑格尔原文属公有领域）。
-本项目不是把那个网站翻译一遍，而是拿它的**源数据**重新做：
+底本来自 Giuliano Infantino 编纂的三套数字版（均 **CC BY 4.0**；原文属公有领域）：
+
+| 版本 | 站点 | 卷 |
+|---|---|---|
+| 黑格尔 | [hegel.idealismedition.com](https://hegel.idealismedition.com) | 16 |
+| 费希特 | [fichte.idealismedition.com](https://fichte.idealismedition.com) | 11 |
+| 谢林 | [schelling.idealismedition.com](https://schelling.idealismedition.com) | 14 |
+
+本项目不是把那几个网站翻译一遍，而是拿它们的**源数据**重新做：
 
 - 语料以 **SQLite** 落地，离线可用，检索由 FTS5 承担
 - 德语旧正字法（`Seyn`/`daß`/`Verhältniß`）与现代拼写互查
@@ -22,21 +28,21 @@ etl/                  语料 ETL（Python）
     search.py         查询解析与检索
     fetch.py          从数字版下载源 TEI
     cli.py            命令行入口
-  tests/              30 个用例
+  tests/              43 个用例
 app/                  桌面应用（Tauri v2 + React/TS）
   src/                前端
-  src-tauri/          Rust 后端（19 个用例，含针对真语料库的集成测试）
-tools/                前端验证脚本（Playwright）
+  src-tauri/          Rust 后端（33 个用例，含针对真语料库的集成测试）
+tools/                前端验证脚本（Playwright，66 项检查）
 data/                 ETL 产物（corpus.db、tei/）
 ```
 
 ## 快速开始
 
 ```bash
-# 1. 建语料库（首次会下载源 TEI，约 1.25 MB）
+# 1. 建语料库（首次会下载源 TEI，三家共 41 卷约 22 MB）
 cd etl
 python3 -m venv .venv && ./.venv/bin/pip install -e '.[dev]'
-./.venv/bin/python -m sshex build --work gw-12 \
+./.venv/bin/python -m sshex build --work all \
     --db ../data/corpus.db --cache ../data/tei
 
 # 2. 跑桌面应用
@@ -68,7 +74,9 @@ Rust 侧的集成测试直接打开 `data/corpus.db` 跑完整链路：旧拼写
 导出的假实现，于是渲染、检索、目录、版式切换都能在无头浏览器里跑：
 
 ```bash
-cd tools && npm install --cache ./.npm-cache && node shoot.js /tmp/shots
+cd tools && npm install --cache ./.npm-cache
+npx playwright install chromium        # 首次要下浏览器（约 150 MB）
+node shoot.js /tmp/shots
 ```
 
 夹具 `tools/mock-data.json` 是**生成物**，不入版本库 —— 从真语料库里切一片
