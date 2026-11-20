@@ -19,14 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-本许可适用于**本仓库的源代码**。
-
-**语料本身不适用本许可**，另见 README「许可与出处」：
-
-- 黑格尔、费希特、谢林的原文均属公有领域
-- 三套数字版的数据与改编归 Giuliano Infantino 所有，以 **CC BY 4.0** 授权
-  （hegel / fichte / schelling.idealismedition.com）
-- 本项目按 CC BY 4.0 的要求署名，见语料库中每条记录的 `license_attribution`
