@@ -24,6 +24,35 @@
 
 语料库**不入版本库**（226 MB），由 ETL 生成。
 
+## 从零恢复工作环境
+
+仓库里只有代码。语料、依赖、构建产物都要另外拿：
+
+```bash
+# 1. 语料 —— 从快照取（推荐，快照是固化下来的）
+cd <项目根>
+curl -LO https://github.com/DuJunxi1993/Social-Science-Hub/releases/download/corpus-1.0/tei-1.0.tar.gz
+curl -LO https://github.com/DuJunxi1993/Social-Science-Hub/releases/download/corpus-1.0/corpus-1.0.db.gz
+tar xzf tei-1.0.tar.gz && mv tei data/
+gunzip corpus-1.0.db.gz && mv corpus.db data/
+
+# 2. 依赖
+cd etl && python3 -m venv .venv && ./.venv/bin/pip install -e '.[dev]'
+cd ../app && npm install
+cd ../tools && npm install
+
+# 3. 前端测试夹具（从语料库切出来）
+../etl/.venv/bin/python make-mock.py
+```
+
+也可以不取快照，直接从原站下载重建 —— 但那时拿到的是**原站当时的样子**，
+不是快照：
+
+```bash
+cd etl && ./.venv/bin/python -m sshex build --work all \
+    --db ../data/corpus.db --cache ../data/tei
+```
+
 ## 语料快照
 
 语料是核心资产，但 226 MB 进不了 git —— 它以**快照**的形式单独发布。

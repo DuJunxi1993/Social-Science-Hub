@@ -38,18 +38,29 @@ data/                 ETL 产物（corpus.db、tei/）
 
 ## 快速开始
 
-```bash
-# 1. 建语料库（首次会下载源 TEI，三家共 41 卷约 22 MB）
-cd etl
-python3 -m venv .venv && ./.venv/bin/pip install -e '.[dev]'
-./.venv/bin/python -m sshex build --work all \
-    --db ../data/corpus.db --cache ../data/tei
+仓库里只有代码。语料从[语料快照](#语料快照)取（推荐），或直接从原站重建。
 
-# 2. 跑桌面应用
-cd ../app
-npm install --cache ./.npm-cache
+```bash
+# 1. 拿语料 —— 从快照取
+curl -LO https://github.com/DuJunxi1993/Social-Science-Hub/releases/download/corpus-1.0/tei-1.0.tar.gz
+tar xzf tei-1.0.tar.gz && mv tei data/
+#   或者只要建好的库（省掉 ETL）：
+#   curl -LO .../corpus-1.0.db.gz && gunzip corpus-1.0.db.gz && mv corpus.db data/
+
+# 2. 装依赖
+cd etl && python3 -m venv .venv && ./.venv/bin/pip install -e '.[dev]'
+cd ../app && npm install
+
+# 3. 跑桌面应用
 npm run app          # 开发模式（Vite + Rust）
 npm run app:build    # 打包 .app / .dmg
+```
+
+直接从原站重建（拿到的会是原站当时的样子，不是快照）：
+
+```bash
+cd etl && ./.venv/bin/python -m sshex build --work all \
+    --db ../data/corpus.db --cache ../data/tei
 ```
 
 > **沙箱里的两个坑**：`~/.cargo` 与 `~/.npm` 可能没有写权限。用
