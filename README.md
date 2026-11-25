@@ -76,9 +76,7 @@ cd etl && ./.venv/bin/python -m sshex build --work all \
 
 ## 语料快照
 
-语料是这个项目的核心资产，却有 226 MB —— 进不了 git，放进仓库也不合适。
-于是它以**快照**的形式单独发布：一旦某一版发出去，那个时间点的语料就固化了，
-不再依赖原站是否还在、是否还改版。
+语料是这个项目的核心资产，以**快照**的形式单独发布。
 
 最新一版：[语料快照 1.0](https://github.com/DuJunxi1993/Social-Science-Hub/releases/tag/corpus-1.0)
 
