@@ -10,7 +10,7 @@
 | 费希特 | [fichte.idealismedition.com](https://fichte.idealismedition.com) | 11 |
 | 谢林 | [schelling.idealismedition.com](https://schelling.idealismedition.com) | 14 |
 
-本项目不是把那几个网站翻译一遍，而是拿它们的**源数据**重新做：
+本项目基于原项目重构：
 
 - 语料以 **SQLite** 落地，离线可用，检索由 FTS5 承担
 - 德语旧正字法（`Seyn`/`daß`/`Verhältniß`）与现代拼写互查
@@ -63,43 +63,9 @@ cd etl && ./.venv/bin/python -m sshex build --work all \
     --db ../data/corpus.db --cache ../data/tei
 ```
 
-> **沙箱里的两个坑**：`~/.cargo` 与 `~/.npm` 可能没有写权限。用
-> `CARGO_HOME=../.cargo-home` 与 `npm install --cache ./.npm-cache` 绕开。
-
-## 测试
-
-```bash
-cd etl && ./.venv/bin/python -m pytest tests/ -q          # 43 个
-cd app/src-tauri && cargo test --release                    # 33 个（含集成测试）
-```
-
-Rust 侧的集成测试直接打开 `data/corpus.db` 跑完整链路：旧拼写能否查到、
-命中带不上 GW 行号、短语与布尔、章节路径带不带层级、跨卷检索、每卷的
-结构是否自洽。
-
-**检索层有两份实现** —— Python（`etl/sshex/search.py`）和 Rust
-（`app/src-tauri/src/search.rs`），行为必须一致：同一个查询在命令行里和在
-应用里要给出同样的命中、同样的高亮区间。两边的测试用例一一对应。
-
-前端用 Playwright 验证（`tools/shoot.js`）：把 Tauri 的 IPC 换成从真语料库
-导出的假实现，于是渲染、检索、目录、版式切换都能在无头浏览器里跑：
-
-```bash
-cd tools && npm install --cache ./.npm-cache
-npx playwright install chromium        # 首次要下浏览器（约 150 MB）
-node shoot.js /tmp/shots
-```
-
-夹具 `tools/mock-data.json` 是**生成物**，不入版本库 —— 从真语料库里切一片
-出来。重建了语料库就重新生成：
-
-```bash
-etl/.venv/bin/python tools/make-mock.py
-```
-
 ## 语料库里有什么
 
-**三家版本、四十一卷**：
+**三位哲学家共四十一卷作品**：
 
 | 版本 | 卷 | 站点 | 印刷页 | 单元 | 章节 | 脚注 |
 |---|---|---|---|---|---|---|
@@ -107,43 +73,6 @@ etl/.venv/bin/python tools/make-mock.py
 | 费希特 | 11 | fichte.idealismedition.com | 6424 | 22460 | 676 | 582 |
 | 谢林 | 14 | schelling.idealismedition.com | 7881 | 29786 | 944 | 3421 |
 | **合计** | **41** | | **20547** | **76478** | **2938** | **5617** |
-
-脚注数与原站各版的统计**逐卷完全一致**（1614 / 582 / 3421）。
-脚注分三种：页脚注、边注（``type="rand"``）、行下注与行上注 ——
-后三种印在版心边缘，同样被正文里的锚点引用，所以一并收进脚注表。
-
-三家都是 Giuliano Infantino 编纂的数字版，**CC BY 4.0**；原文本身是公有领域。
-卷目不写死在代码里 —— 每次建库都从各站点的 ``assets/edition-data.js`` 读，
-站点更新了卷目这边跟着更新。
-
-以 GW 12《Wissenschaft der Logik》(1816) 为例：310 页、1259 个单元、
-10537 个印刷行、86 个章节。
-
-数据模型（`data/corpus.db`）：
-
-```
-work      一卷的元数据与授权信息
-page      印刷页：GW 页码、PDF 页码、书眉、帖码
-section   章节树（层级来自各卷自己的印刷目录）
-unit      内容单元：正文 + 疏排区间 + 引用 + 印刷行 + 行区间表
-footnote  脚注（含 prev/next 链）
-xref      互引
-toc_printed  书前的印刷目录
-unit_fts  FTS5 全文索引（存归一后的词）
-```
-
-**页码是字符串，不是整数。** 卷首的页是罗马数字（„V“、„XXVII“），
-正文页才是阿拉伯数字 —— 引用 „SW I, V.3“ 指的就是卷首那一页。
-所以 `book_page` 一律按文本存。
-
-**没有「词 → 偏移」表。** 检索命中后要指出原文的哪一段，乍看需要一张带偏移
-的词表（十六卷近两百万个词，连索引要 101 MB，占全库的 58%）。但 FTS5 已经
-告诉我们「这个单元命中了」，剩下的只是在一千三百来个字里找那几个词 —— 检索
-时现切现算，是微秒级的。去掉那张表，库从 173 MB 瘦到 71 MB。
-
-**两套坐标系**：PDF 页码（扫描本）与 GW 页码（印刷页）。
-引用格式是 `GW 12, 241.36`（页.行），所以每个单元都存了行区间表，
-任意一个命中位置都能反查它落在第几行。
 
 ## 语料快照
 
